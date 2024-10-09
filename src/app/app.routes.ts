@@ -3,12 +3,17 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folder/inbox',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {
-    path: 'folder/:id',
+    path: 'login',
     loadComponent: () =>
-      import('./folder/folder.page').then((m) => m.FolderPage),
+      import('./login/login.component').then((m) => m.LoginComponent),
+  },
+  {
+    path: 'splash',
+    loadComponent: () =>
+      import('./splash/splash.component').then((m) => m.SplashComponent),
   },
 ];

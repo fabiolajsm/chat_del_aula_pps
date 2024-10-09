@@ -1,0 +1,99 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff; /* Texto blanco */
+  margin-top: 70px;
+  margin-top: 70px;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+ion-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+h2.text-access {
+  margin-bottom: 20px;
+  font-size: 20px;
+  text-align: center;
+  color: #ffcc00; /* Color dorado para el título */
+}
+
+ion-label {
+  padding: 10px 0; /* Padding vertical para el label */
+  font-size: 16px; /* Ajusta el tamaño del texto si es necesario */
+  color: #fff; /* Asegúrate de que el color sea blanco */
+}
+
+.buttons-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.btn {
+  background-color: #ffcc00; /* Color dorado para los botones */
+  color: #000; /* Texto negro */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 5px 0;
+  width: 100%;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #e6b800; /* Color dorado más oscuro al pasar el mouse */
+}
+
+ion-input {
+  color: #fff; /* Texto blanco */
+  border: none; /* Sin borde */
+  margin-bottom: 15px;
+  width: 100%;
+  --border-color: transparent; /* Elimina el color del borde */
+  --box-shadow: none; /* Elimina la sombra */
+}
+
+ion-input:focus {
+  --border-color: transparent; /* Elimina el borde al tener foco */
+  --box-shadow: none; /* Elimina la sombra al tener foco */
+}
+
+ion-label {
+  padding: 10px 0; /* Padding vertical para el label */
+  font-size: 16px; /* Ajusta el tamaño del texto si es necesario */
+  color: #fff; /* Asegúrate de que el color sea blanco */
+}
+
+#button {
+  margin-top: 20px;
+  background-color: #ffcc00; /* Botón dorado */
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+#button:hover {
+  background-color: #e6b800; /* Efecto hover en el botón */
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-danger {
+  color: #ff3333; /* Color rojo para el mensaje de error */
+}
