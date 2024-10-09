@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="black" class="header-title">
+    <img src="../../assets/logo.png" alt="iconos logo" class="logo" />
+    <ion-button
+      color="primary"
+      fill="clear"
+      slot="end"
+      (click)="handleLogout()"
+    >
+      <ion-icon
+        aria-hidden="true"
+        size="large"
+        name="arrow-redo-circle-outline"
+      ></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <h1 class="instruction-message">Selecciona una sala de chat</h1>
+
+  <div class="button-container">
+    <ion-button
+      class="room-button"
+      (click)="selectRoom('PPS-4A')"
+      expand="full"
+      color="medium"
+    >
+      <img src="../../assets/sala_a.png" alt="sala a" />
+    </ion-button>
+    <ion-button
+      class="room-button"
+      (click)="selectRoom('PPS-4B')"
+      expand="full"
+      color="medium"
+    >
+      <img src="../../assets/sala_b.png" alt="sala b" />
+    </ion-button>
+  </div>
+</ion-content>

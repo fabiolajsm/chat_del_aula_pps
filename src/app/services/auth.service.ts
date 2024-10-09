@@ -1,28 +1,25 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import {
   Auth,
-  authState,
   signInWithEmailAndPassword,
+  signOut,
+  user,
 } from '@angular/fire/auth';
-import { collection, getDocs, query, where } from '@angular/fire/firestore';
-import { Router } from '@angular/router';
-
-import { Observable, from, map, of, switchMap } from 'rxjs';
-import { Firestore } from '@angular/fire/firestore';
+import { Observable, from } from 'rxjs';
 import { UserInterface } from '../interfaces/user.interface';
+import { collection } from 'firebase/firestore';
+import { Firestore, collectionData } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  firestore = inject(Firestore);
   firebaseAuth = inject(Auth);
+  firestore = inject(Firestore);
+  user$ = user(this.firebaseAuth);
+  currentUserSig = signal<UserInterface | null | undefined>(undefined);
 
-  userCollectionName = 'users';
-  historyCollectionName = 'loginHistory';
-  constructor(private router: Router) {}
-
-  login(email: string, password: string) {
+  login(email: string, password: string): Observable<void> {
     const promise = signInWithEmailAndPassword(
       this.firebaseAuth,
       email,
@@ -31,41 +28,13 @@ export class AuthService {
     return from(promise);
   }
 
-  logout() {
-    this.firebaseAuth.signOut().then(() => this.router.navigate(['login']));
+  logout(): Observable<void> {
+    const promise = signOut(this.firebaseAuth);
+    return from(promise);
   }
 
-  getCurrentUser(): Observable<UserInterface | undefined> {
-    return authState(this.firebaseAuth).pipe(
-      switchMap((user) => {
-        if (user) {
-          return this.getUserByEmail(user.email!).pipe(
-            map((userData) => userData)
-          );
-        } else {
-          return of(undefined);
-        }
-      })
-    );
-  }
-
-  getUserByEmail(email: string): Observable<UserInterface | undefined> {
-    const usersRef = collection(this.firestore, 'users');
-    const q = query(usersRef, where('correo', '==', email));
-
-    return new Observable<UserInterface | undefined>((observer) => {
-      getDocs(q)
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            const data = doc.data() as UserInterface;
-            const userData = { ...data, id: doc.id };
-            observer.next(userData);
-          });
-          observer.complete();
-        })
-        .catch((error) => {
-          observer.error(error);
-        });
-    });
+  getUsers(): Observable<[]> {
+    const users = collection(this.firestore, 'users');
+    return collectionData(users) as Observable<[]>;
   }
 }

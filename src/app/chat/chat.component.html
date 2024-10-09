@@ -1,0 +1,65 @@
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#d9d9d9"
+  type="ball-atom"
+  [fullScreen]="true"
+>
+  <p style="color: #d9d9d9; font-family: Roboto">Cargando...</p>
+</ngx-spinner>
+
+<ion-header [translucent]="true">
+  <ion-toolbar color="black" class="header-title">
+    <ion-button color="dark" fill="clear" (click)="dismiss()" slot="start">
+      <ion-icon aria-hidden="true" name="close-outline"></ion-icon>
+    </ion-button>
+    <ion-title *ngIf="room.length">Chat {{ room }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<div class="messages-container" *ngIf="!isLoading">
+  <ng-container *ngIf="messagesGroupedByDate.length; else noMessages">
+    <ng-container *ngFor="let group of messagesGroupedByDate">
+      <p class="message-date">{{ group.date }}</p>
+
+      <ng-container *ngFor="let message of group.messages">
+        <div
+          *ngIf="message.username !== currentUsername"
+          class="align-start message-container"
+        >
+          <p class="username">{{ prefixUsername }}{{ message.username }}</p>
+          <div class="message-bubble">
+            <p class="message-text">{{ message.text }}</p>
+            <p class="message-time">{{ message.time }}</p>
+          </div>
+        </div>
+
+        <div
+          *ngIf="message.username === currentUsername"
+          class="align-end message-container"
+        >
+          <div class="message-bubble">
+            <p class="message-text">{{ message.text }}</p>
+            <p class="message-time">{{ message.time }}</p>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #noMessages>
+    <p>Aún no hay mensajes.</p>
+  </ng-template>
+</div>
+
+<form class="message-form" [formGroup]="form" *ngIf="!isLoading">
+  <textarea
+    formControlName="newMessage"
+    name="newMessage"
+    rows="1"
+    placeholder="Escribe algo..."
+  ></textarea>
+  <button type="button" (click)="sendMessage()">
+    <span class="material-symbols-outlined">enviar</span>
+  </button>
+</form>
