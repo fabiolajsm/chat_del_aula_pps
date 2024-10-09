@@ -1,0 +1,11 @@
+{
+  "background_color": "#eeeeee",
+  "icons": [
+    {
+      "purpose": "any maskable",
+      "sizes": "666.6666666666666x666.6666666666666",
+      "src": "/assets/icon.png",
+      "type": "image/png"
+    }
+  ]
+}
