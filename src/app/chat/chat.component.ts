@@ -19,6 +19,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
+
 @Component({
   selector: 'app-chat',
   standalone: true,
@@ -33,10 +34,10 @@ import {
     IonToolbar,
   ],
   templateUrl: './chat.component.html',
-  styleUrl: './chat.component.scss',
+  styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  @Input() room: string = '';
+  @Input() room: string = ''; // Sala de chat seleccionada
 
   constructor(
     private modalController: ModalController,
@@ -52,27 +53,18 @@ export class ChatComponent implements OnInit, OnDestroy {
   authService = inject(AuthService);
   chatService = inject(ChatService);
 
-  currentUsername: string = '';
+  currentUserEmail: string = '';
   subsUsers!: Subscription;
   subsChatHistory!: Subscription;
   messages: ChatMessage[] | null = null;
   messagesGroupedByDate: { date: string; messages: ChatMessage[] }[] = [];
-  users: any[] = [];
   prefixUsername: string = '@';
   isLoading: boolean = false;
 
   ngOnInit(): void {
-    this.subsUsers = this.authService
-      .getUsers()
-      .subscribe((response: UserInterface[]) => {
-        this.users = response.filter(
-          (user) => user.correo !== this.currentUsername
-        );
-      });
-
     this.authService.user$.subscribe((user) => {
-      if (user?.displayName) {
-        this.currentUsername = user.displayName;
+      if (user?.email) {
+        this.currentUserEmail = user.email;
       }
     });
     this.loadMessages();
@@ -80,14 +72,16 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subsUsers.unsubscribe();
-    this.subsChatHistory.unsubscribe();
+    if (this.subsChatHistory) {
+      this.subsChatHistory.unsubscribe();
+    }
   }
 
   loadMessages() {
     this.isLoading = true;
     this.spinner.show();
     this.subsChatHistory = this.chatService
-      .getMessages()
+      .getMessages(this.room)
       .subscribe((data: ChatMessage[]) => {
         this.messages = data;
         this.groupMessagesByDate();
@@ -105,10 +99,11 @@ export class ChatComponent implements OnInit, OnDestroy {
       const time = format(newDate, 'hh:mm a');
 
       this.chatService.updateMessages(
-        this.currentUsername,
+        this.currentUserEmail,
         rawForm.newMessage,
         date,
-        time
+        time,
+        this.room
       );
       this.form.reset();
       this.loadMessages();
@@ -116,17 +111,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   orderByDateAndTime(messageA: ChatMessage, messageB: ChatMessage) {
-    const dateA = parse(
-      `${messageA.date} ${messageA.time}`,
-      'dd MMM yyyy hh:mm a',
-      new Date()
-    );
-    const dateB = parse(
-      `${messageB.date} ${messageB.time}`,
-      'dd MMM yyyy hh:mm a',
-      new Date()
-    );
-    return dateA.getTime() - dateB.getTime();
+    const dateTimeA = new Date(`${messageA.date} ${messageA.time}`);
+    const dateTimeB = new Date(`${messageB.date} ${messageB.time}`);
+
+    return dateTimeA.getTime() - dateTimeB.getTime();
   }
 
   groupMessagesByDate() {
@@ -155,6 +143,11 @@ export class ChatComponent implements OnInit, OnDestroy {
         date,
         messages: grouped[date].sort(this.orderByDateAndTime),
       }));
+  }
+
+  getUsernameFromEmail(email: string): string {
+    const atIndex = email.indexOf('@');
+    return atIndex !== -1 ? email.slice(0, atIndex) : email;
   }
 
   dismiss() {

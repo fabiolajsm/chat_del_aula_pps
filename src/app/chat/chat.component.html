@@ -24,10 +24,12 @@
 
       <ng-container *ngFor="let message of group.messages">
         <div
-          *ngIf="message.username !== currentUsername"
+          *ngIf="message.username !== currentUserEmail"
           class="align-start message-container"
         >
-          <p class="username">{{ prefixUsername }}{{ message.username }}</p>
+          <p class="username">
+            {{ prefixUsername }}{{ getUsernameFromEmail(message.username) }}
+          </p>
           <div class="message-bubble">
             <p class="message-text">{{ message.text }}</p>
             <p class="message-time">{{ message.time }}</p>
@@ -35,7 +37,7 @@
         </div>
 
         <div
-          *ngIf="message.username === currentUsername"
+          *ngIf="message.username === currentUserEmail"
           class="align-end message-container"
         >
           <div class="message-bubble">
@@ -57,6 +59,7 @@
     formControlName="newMessage"
     name="newMessage"
     rows="1"
+    maxlength="21"
     placeholder="Escribe algo..."
   ></textarea>
   <button type="button" (click)="sendMessage()">

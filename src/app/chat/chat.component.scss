@@ -45,7 +45,8 @@
 
 .username {
   margin: 0 0 5px 0;
-  font-weight: bold;
+  font-weight: 500;
+  font-size: 15px;
 }
 
 .message-date {
@@ -53,11 +54,13 @@
   text-align: center;
   font-size: 14px;
   color: #999;
+  font-weight: bold;
   margin: 10px 0;
 }
 
 .message-bubble {
   background-color: #fefae0;
+  color: black;
   border-radius: 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   padding: 8px 12px;
@@ -68,6 +71,7 @@
 
 .align-end .message-bubble {
   background-color: #d3d3d3;
+  color: black;
 }
 
 .message-text {

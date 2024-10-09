@@ -1,13 +1,14 @@
 import { Injectable, inject, signal } from '@angular/core';
 import {
   Auth,
+  authState,
   signInWithEmailAndPassword,
   signOut,
   user,
 } from '@angular/fire/auth';
-import { Observable, from } from 'rxjs';
+import { Observable, from, map, of, switchMap } from 'rxjs';
 import { UserInterface } from '../interfaces/user.interface';
-import { collection } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { Firestore, collectionData } from '@angular/fire/firestore';
 
 @Injectable({
@@ -31,10 +32,5 @@ export class AuthService {
   logout(): Observable<void> {
     const promise = signOut(this.firebaseAuth);
     return from(promise);
-  }
-
-  getUsers(): Observable<[]> {
-    const users = collection(this.firestore, 'users');
-    return collectionData(users) as Observable<[]>;
   }
 }
