@@ -11,8 +11,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { addIcons } from 'ionicons';
 import { arrowRedoCircleOutline } from 'ionicons/icons';
 import { Router } from '@angular/router';
-import { ChatComponent } from '../chat/chat.component';
-import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +18,6 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./home.component.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonToolbar, IonButton, IonIcon],
-  providers: [ModalController],
 })
 export class HomeComponent {
   selectedRoom: string = '';
@@ -28,18 +25,14 @@ export class HomeComponent {
   constructor(
     public auth: AuthService,
     public spinner: NgxSpinnerService,
-    private router: Router,
-    private modalController: ModalController
+    private router: Router
   ) {
     addIcons({ arrowRedoCircleOutline });
   }
 
   async selectRoom(room: string) {
-    const modal = await this.modalController.create({
-      component: ChatComponent,
-      componentProps: { room },
-    });
-    return await modal.present();
+    localStorage.setItem('room', room);
+    this.router.navigate(['chat']);
   }
 
   handleLogout() {
